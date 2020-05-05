@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticlesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,9 +28,20 @@ Route::get('/about', function () {
     ]);
 });
 
-Route::get('/articles/{article}', 'ArticlesController@show');
-
 Route::get('/articles', 'ArticlesController@index');
+Route::post('/articles', 'ArticlesController@store');
+Route::get('/articles/create', 'ArticlesController@create');
+Route::get('/articles/{article}', 'ArticlesController@show');
+Route::get('/articles/{article}/edit', 'ArticlesController@edit');
+Route::put('/articles/{article}', 'ArticlesController@update');
+
+
+//REST
+// /articles  -->inndex(list)
+// /articles{id}  -->show
+// /articles  -->inndex(list)
+
+
 
 Route::get('/test',function() {
     //return view('test');
