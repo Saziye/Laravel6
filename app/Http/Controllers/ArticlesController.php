@@ -14,10 +14,10 @@ class ArticlesController extends Controller
         return view('articles.index', ['articles' => $articles]);
     }
 
-    public function show($id)
+    public function show(Article $article)
     {
         //Show a single resource
-        $article = Article::find($id);
+        // $article = Article::find($id); //Article:: where('id',1)->first()
         return view('articles.show', ['article' => $article]);
     }
 
@@ -28,46 +28,64 @@ class ArticlesController extends Controller
 
     public function store() {
         //Persist the new resource
-        request()->validate([
+
+        Article::create($this->validateArticle());
+
+        /*Article::create(request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]));*/
+
+        /*$validatedAttributes =  request()->validate([
             'title' => 'required',
             'excerpt' => 'required',
             'body' => 'required'
         ]);
+        Article::create($validatedAttributes);*/
 
-        $article = new Article();
+        /*Article::create([
+            'title' => request('title'),
+            'excerpt' => request('excerpt'),
+            'body' => request('body'),
+        ]);*/
+
+        /*$article = new Article();
         $article->title = request('title');
         $article->excerpt = request('excerpt');
         $article->body = request('body');
-        $article->save();
+        $article->save();*/
 
-        return redirect('/articles');
+        // return redirect('/articles');
+        return redirect(route('articles.index'));
     }
 
-    public function edit($id) {
+    public function edit(Article $article) {
         //Show a view to edit an existing resource
-        $article = Article::find($id);
+
         //return view('articles.edit',['article'=>$article]); same thing down
         return view('articles.edit',compact('article'));
     }
 
-    public function update($id) {
+    public function update(Article $article) {
         //Persist the edited resource
-        request()->validate([
-            'title' => 'required',
-            'excerpt' => 'required',
-            'body' => 'required'
-        ]);
 
-        $article = Article::find($id);
-        $article->title = request('title');
-        $article->excerpt = request('excerpt');
-        $article->body = request('body');
+        Article::update($this->validateArticle());
+        // return redirect('/articles/'.$article->id); //instead use route
+        // return redirect(route('articles.show', $article));
+        return redirect($article->path());
 
-        $article->save();
-        return redirect('/articles/'.$article->id);
     }
 
     public function destroy() {
         //Delete the resource 
+    }
+
+    protected function validateArticle() {
+        return request()->validate([
+            'title' => 'required',
+            'excerpt' => 'required',
+            'body' => 'required'
+        ]);
     }
 }
