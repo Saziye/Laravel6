@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticlesController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -120,3 +121,10 @@ Route::get('/test',function() {
 //First Way->app->Http->Controllers->Create new php class -> PostsController.php
 //Second Way->cmd-> php artisan make:controller PostsController
 Route::get('/posts/{post}', 'PostsController@show');
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/payments/create', 'PaymentsController@create')->middleware('auth');
+Route::post('/payments', 'PaymentsController@store')->middleware('auth');
+
+Auth::routes();
+
