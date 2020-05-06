@@ -13,6 +13,41 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+/*
+app()->bind('example',function() {
+    $foo = config('services.foo'); //filename.keyname
+    return new \App\Example($foo);
+});
+Route::get('/container', function() {
+    $example = resolve('example');
+    ddd($example);
+});
+*/
+Route::get('/container', function(\App\Example $example) {
+    //$example = resolve(\App\Example::class); //resolve ile app()->make aynı
+    ddd($example);
+});
+/*
+app()->bind('App\Example',function() {
+    $collaborator = new \App\Collaborator();
+    $foo = 'foobar';
+    return new \App\Example($collaborator,$foo);
+});*/
+Route::get('/page', 'PagesController@home');
+
+Route::get('/pagef', 'PagesController@homef');
+
+
+Route::get('/containerc', function () {
+    $containerc = new \App\ContainerC;
+    $containerc->bind('examplec', function(){
+        return new \App\ExampleC();
+    });
+
+    $examplec = $containerc->resolve('examplec');
+    $examplec->go();
+});
+
 
 Route::get('/', function () {
     return view('welcome');
