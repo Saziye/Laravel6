@@ -16,9 +16,9 @@ class PAymentReceived extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($amount)
     {
-        //
+        $this->amount = $amount;
     }
 
     /**
@@ -29,7 +29,7 @@ class PAymentReceived extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database','nexmo'];
     }
 
     /**
@@ -47,7 +47,6 @@ class PAymentReceived extends Notification
                     ->action('Sign Up', url('/'))
                     ->line('Thanks!');
     }
-
     /**
      * Get the array representation of the notification.
      *
@@ -57,7 +56,7 @@ class PAymentReceived extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'amount' => $this->amount
         ];
     }
 }
